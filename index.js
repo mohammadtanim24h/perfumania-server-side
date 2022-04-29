@@ -5,9 +5,6 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// perfumaniaAdmin
-// UCUtBYI4vDcH5Utf
-
 // Middleware 
 app.use(cors());
 app.use(express.json());
@@ -24,7 +21,6 @@ async function run() {
 
         app.get("/perfumes", async (req, res) => {
             const query = req.query;
-            console.log(query);
             const cursor = perfumeCollection.find(query);
             const perfumes = await cursor.toArray();
             res.send(perfumes)
