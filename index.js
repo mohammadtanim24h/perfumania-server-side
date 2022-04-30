@@ -33,6 +33,19 @@ async function run() {
             const perfume = await perfumeCollection.findOne(query);
             res.send(perfume);
         })
+
+        // Update perfume
+        app.put("/perfume/:id", async (req, res) => {
+            const id = req.params.id;
+            const perfume = req.body;
+            const filter = {_id: ObjectId(id)};
+            const options = { upsert: true };
+            const updatedPerfume = {
+                $set: perfume
+            }
+            const result = await perfumeCollection.updateOne(filter, updatedPerfume, options);
+            res.send(result);
+        })
     }
     finally {
 
