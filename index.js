@@ -34,6 +34,14 @@ async function run() {
             res.send(perfume);
         })
 
+        // Add Perfume
+        app.post("/perfume", async (req, res) => {
+            const perfume = req.body;
+            console.log(perfume);
+            const result = await perfumeCollection.insertOne(perfume);
+            res.send(result);
+        })
+
         // Update perfume
         app.put("/perfume/:id", async (req, res) => {
             const id = req.params.id;
