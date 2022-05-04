@@ -19,11 +19,21 @@ async function run() {
         await client.connect();
         const perfumeCollection = client.db("perfumania").collection("perfumes");
 
+        // Get all items or specific items using query
         app.get("/perfumes", async (req, res) => {
             const query = req.query;
+            console.log(query);
             const cursor = perfumeCollection.find(query);
             const perfumes = await cursor.toArray();
-            res.send(perfumes)
+            res.send(perfumes);
+        })
+
+        // Get top products 
+        app.get("/topProducts", async (req, res) => {
+            const query = {sold: {$gt: 20}};
+            const cursor = perfumeCollection.find(query);
+            const perfumes = await cursor.toArray();
+            res.send(perfumes);
         })
 
         // Get single Perfume
