@@ -2,6 +2,7 @@ const express = require('express');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const cors = require('cors');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -19,12 +20,37 @@ async function run() {
         await client.connect();
         const perfumeCollection = client.db("perfumania").collection("perfumes");
 
-        // Get all items or specific items using query
+        // JWT
+        app.post("/login", (req, res) => {
+            const email = req.body;
+            const token = jwt.sign(email, process.env.ACCESS_TOKEN_SECRET);
+            res.send({token});
+        })
+
+        // Get all items 
         app.get("/perfumes", async (req, res) => {
             const query = req.query;
             const cursor = perfumeCollection.find(query);
             const perfumes = await cursor.toArray();
             res.send(perfumes);
+        })
+
+        // Get Specific items using query
+        app.get("/myPerfumes", async (req, res) => {
+            const email = req.query.email;
+            const token = req.query.token;
+            const query = {email};
+            const decoded = verifyToken(token);
+            console.log('normal',email,'decoded', decoded);
+            if(email === decoded.email) {
+                const cursor = perfumeCollection.find(query);
+                const perfumes = await cursor.toArray();
+                res.send({authorization: 'successful', perfumes});
+            }
+            else {
+                const perfumes = [];
+                res.send({authorization: 'failed', perfumes});
+            }
         })
 
         // Get top products 
@@ -88,3 +114,18 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
     console.log('Listening to Perfumania, port', port);
 })
+
+// Verify Token
+function verifyToken(token) {
+    let email;
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function(err, decoded) {
+        if(err) {
+            email = {email: 'Invalid Email'};
+        }
+        if(decoded) {
+            email = decoded;
+        }
+    });
+
+    return email;
+}
