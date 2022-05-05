@@ -22,7 +22,6 @@ async function run() {
         // Get all items or specific items using query
         app.get("/perfumes", async (req, res) => {
             const query = req.query;
-            console.log(query);
             const cursor = perfumeCollection.find(query);
             const perfumes = await cursor.toArray();
             res.send(perfumes);
