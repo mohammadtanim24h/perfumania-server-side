@@ -55,7 +55,7 @@ async function run() {
 
         // Get top products 
         app.get("/topProducts", async (req, res) => {
-            const query = {sold: {$gt: 35}};
+            const query = {sold: {$gt: 70}};
             const options = {sort: {sold: -1}}
             const cursor = perfumeCollection.find(query, options);
             const perfumes = await cursor.toArray();
