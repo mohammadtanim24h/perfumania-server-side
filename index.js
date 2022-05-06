@@ -111,6 +111,10 @@ app.get("/", (req, res) => {
     res.send("Perfumania is up and running perfectly");
 })
 
+app.get("/hero", (req, res) => {
+    res.send("hero meets heroku");
+})
+
 app.listen(port, () => {
     console.log('Listening to Perfumania, port', port);
 })
