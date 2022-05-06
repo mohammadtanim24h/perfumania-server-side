@@ -20,7 +20,7 @@ async function run() {
         await client.connect();
         const perfumeCollection = client.db("perfumania").collection("perfumes");
 
-        // JWT
+        // Generate JWT token
         app.post("/login", (req, res) => {
             const email = req.body;
             const token = jwt.sign(email, process.env.ACCESS_TOKEN_SECRET);
