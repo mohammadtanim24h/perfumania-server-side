@@ -38,7 +38,8 @@ async function run() {
         // Get Specific items using query
         app.get("/myPerfumes", async (req, res) => {
             const email = req.query.email;
-            const token = req.query.token;
+            const authHeader = req.headers.authorization;
+            const token = authHeader?.split(" ")[1];
             const query = {email};
             const decoded = verifyToken(token);
             console.log('normal',email,'decoded', decoded);
